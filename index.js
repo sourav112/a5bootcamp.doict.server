@@ -31,7 +31,59 @@ const client = new MongoClient(uri, {
   
       const userCollection = client.db("usersDbBootcamp").collection("users");
       const catCollection = client.db("usersDbBootcamp").collection("category");
+      const productCollection = client.db("usersDbBootcamp").collection("product");
   
+      // Product Action
+      app.post("/products", async (req, res) => {
+        const products = req.body;
+        console.log(products);
+        const result = await productCollection.insertOne(products);
+        res.send(result);
+      });
+      app.get("/products", async (req, res) => {
+        const query = productCollection.find();
+        const result = await query.toArray();
+        res.send(result);
+      });
+      app.delete("/product/:id", async (req, res) => {
+        const id = req.params.id;
+        console.log(id);
+        const query = { _id: new ObjectId(id) };
+        const result = await productCollection.deleteOne(query);
+        res.send(result);
+      });
+      app.get("/product/:id", async (req, res) => {
+        const id = req.params.id;
+        console.log(id);
+        const query = { _id: new ObjectId(id) };
+        const result = await productCollection.findOne(query);
+        console.log(result);
+        res.send(result);
+      });
+      app.put("/product/:id", async (req, res) => {
+        const id = req.params.id;
+        const product = req.body;
+        console.log(id, product);
+  
+        const filter = { _id: new ObjectId(id) };
+        const option = { upsert: true };
+  
+        const updatedProduct = {
+          $set: {
+            name: product.name,
+            category:product.category,
+            
+          },
+        };
+  
+        const result = await productCollection.updateOne(
+          filter,
+          updatedProduct,
+          option
+        );
+        res.send(result);
+      });
+
       // Category Action
       app.post("/cats", async (req, res) => {
         const cats = req.body;
