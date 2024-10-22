@@ -172,6 +172,15 @@ const client = new MongoClient(uri, {
         console.log(result);
         res.send(result);
       });
+
+      app.get("/userprovider/:id", async (req, res) => {
+        const email = req.params.id;
+        console.log("Backend: ",req);
+        const query = { email: email };
+        const result = await userCollection.findOne(query);
+        console.log(result);
+        res.send(result);
+      });
   
       app.post("/users", async (req, res) => {
         const users = req.body;
@@ -192,6 +201,12 @@ const client = new MongoClient(uri, {
           $set: {
             name: user.name,
             email: user.email,
+            password: user.password,
+            img_url:user.img_url,
+            address:user.address,
+            isAdmin:user.isAdmin,
+            isBlocked:user.isBlocked,
+
           },
         };
   
