@@ -32,7 +32,28 @@ const client = new MongoClient(uri, {
       const userCollection = client.db("usersDbBootcamp").collection("users");
       const catCollection = client.db("usersDbBootcamp").collection("category");
       const productCollection = client.db("usersDbBootcamp").collection("product");
+      const productBuyCollection = client.db("usersDbBootcamp").collection("productBuy");
   
+
+      //Insert Product Buy Section
+
+      app.post("/productBuy", async (req, res) => {
+        const products = req.body;
+        console.log(products);
+        const result = await productBuyCollection.insertOne(products);
+        res.send(result);
+      });
+
+      app.get("/productBuyQuery/:id", async (req, res) => {
+        const id = req.params.id;
+        console.log(id);
+        const query = { email: id };
+        //const query = productCollection.find();
+        const result = await productBuyCollection.find(query).toArray();
+        console.log(result);
+        res.send(result);
+      });
+
       // Get Product According to Category For Home Page
       app.get("/cathome/:id", async (req, res) => {
         const id = req.params.id;
