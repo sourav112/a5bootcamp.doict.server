@@ -112,7 +112,10 @@ const client = new MongoClient(uri, {
           $set: {
             name: product.name,
             category:product.category,
-            
+            details:product.details,
+            image:product.image,
+            price:product.price,
+            rating:product.rating,
           },
         };
   
